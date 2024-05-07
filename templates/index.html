@@ -1,43 +1,44 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplicacion</title>
-    <script>
-        // async function getRequest(url = '') {
-        //     const response = await fetch(url, {
-        //         method: 'GET',
-        //         cache: 'no-cache'
-        //     })
-        //     return response.json()
-        // }
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     let url = document.location
-        //     let route = "/flaskwebgui-keep-server-alive"
-        //     let interval_request = 3 * 1000 //sec
-        //     function keep_alive_server() {
-        //         getRequest(url + route)
-        //             .then(data => console.log(data))
-        //     }
-        //     setInterval(keep_alive_server, interval_request)()
-        // })
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script>
-        jQuery(document).ready(function($) {
-            $.ajax({
-                url : "http://127.0.0.1:5000/backend/",
-                type : "get",
-                data : {dato: 'holaaaaa'}
-            })
-            .done(function(response){
-                document.write(response)
-            })
-        })
-    </script>
+    <link rel="stylesheet" href="statics/css/bootstrap.min.css">
+    <link rel="stylesheet" href="statics/js/bootstrap.min.js">
+    <link rel="stylesheet" href="popper.min.js">
+    <title>Ecuaciones de 2do grado</title>
 </head>
 <body>
-    <h3>Hola</h3>
+    <h2>Formulario de Ecuaciones</h2>
+
+    <form action="">
+      <label for="ecuacion1">Input de ecuación:</label><br>
+      <input type="text" id="ecuacion1" name="ecuacion1"><br>
+      <label for="ecuacion2">Input de ecuación:</label><br>
+      <input type="text" id="ecuacion2" name="ecuacion2"><br>
+      <label for="ecuacion3">Input de ecuación:</label><br>
+      <input type="text" id="ecuacion3" name="ecuacion3"><br>
+      <label for="ecuacion4">Input de ecuación:</label><br>
+      <input type="text" id="ecuacion4" name="ecuacion4"><br>
+    
+      <p>Variables:</p>
+      <input type="checkbox" id="x" name="x">
+      <label for="x">X</label><br>
+      <input type="checkbox" id="y" name="y">
+      <label for="y">Y</label><br>
+      <input type="checkbox" id="z" name="z">
+      <label for="z">Z</label><br>
+      <input type="checkbox" id="w" name="w">
+      <label for="w">W</label><br>
+    
+      <p>Superparámetros:</p>
+      <label for="tamanoPoblacion">Tamaño de población:</label><br>
+      <input type="text" id="tamanoPoblacion" name="tamanoPoblacion"><br>
+      <label for="numeroIteraciones">Número de iteraciones:</label><br>
+      <input type="text" id="numeroIteraciones" name="numeroIteraciones"><br>
+    
+      <input type="submit" value="Generar vista histórica">
+      <input type="submit" value="Generar resultado">
+    </form> 
 </body>
 </html>
