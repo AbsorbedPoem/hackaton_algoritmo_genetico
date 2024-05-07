@@ -123,6 +123,7 @@ class genAlgorithm :
         """Fisiona individuos padres, para generar un nuevo hijo a partir de sus fragmentos"""
         descendent = []
         for i in range(len(indiv[0])):
+            print(i)
             fis_point = np.random.randint(self.n_indivs)
             descendent.append(indiv[0][i][:fis_point] + indiv[1][i][fis_point:])
         return descendent
@@ -134,7 +135,7 @@ class genAlgorithm :
             for j in range(len(indiv[0])):
                 if np.random.random() < self.mutation_rate:
                     mutated_gen = np.random.choice(self.gen_pool["decimal" if j > 0 else "integer"])
-                    indiv = indiv[i][0:j] + [mutated_gen] + indiv[i][j + 1:]
+                    indiv[i] = indiv[i][0:j] + [mutated_gen] + indiv[i][j + 1:]
         return indiv
 
     
@@ -161,7 +162,7 @@ class genAlgorithm :
         for indiv in self.population:
             scrs.append(self.get_score(indiv = indiv))
             
-        scores = np.array(scrs)
+        scores:np.ndarray = np.array(scrs, dtype='float64')
             
         # los pesos deben estar normalizados para usar el algoritmo de selección
         scores -= np.amin(scores)
@@ -169,31 +170,24 @@ class genAlgorithm :
             return
         scores /= scores.sum()
         
-        prin = True
-        
         for _ in self.population:
             # se seleccionan los padres en base a la distribucion de probabilidad dada por lo pesos
-            parents = list(np.random.choice(len(self.population), 2, p = scores))
+            parents = list(np.random.choice(len(self.population), size = 2, p = scores))
             # efectuacion de la particion binara y la mutacion para cada par de padres seleccionado
-            new_indiv = self.binary_fision(parents)
-            if prin:
-                print(new_indiv)
+            new_indiv = self.binary_fision([self.population[parents[0]], self.population[parents[1]]])
             new_indiv = self.mutate_indiv(new_indiv)
-            if prin:
-                print(new_indiv)
-                prin = False
-        #     # se añade el nuevo individuo
-        #     new_pop.append(new_individuo)
+            # se añade el nuevo individuo
+            new_population.append(new_indiv)
         
-        # return new_pop
+        self.population = new_population
     
     
     #######################################################
     # MATPLOT
     #######################################################
-    
-    
-    
+
+
+
 
 
 def decode_2_float(num) -> float:
