@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import cm, axes, figure
 from mpl_toolkits.mplot3d.axes3d import get_test_data
 
 from pyrecorder.recorder import Recorder
@@ -29,6 +27,9 @@ class genAlgorithm :
         self.functions:list[sympy.Expr] = []
         self.priorities:list[float] = []
         self.population:list = []
+        
+        self.metrics:list = dict()
+        self.history:list = []
         
         
     #######################################################
@@ -150,7 +151,7 @@ class genAlgorithm :
     #######################################################
     
     
-    def next_gen(self, verbose = False) -> None:
+    def next_gen(self, iteration:int) -> None:
         """main loop del avance de una generación"""
         new_population = []
         scrs = []
@@ -168,6 +169,9 @@ class genAlgorithm :
             return
         scores /= scores.sum()
         
+        # control de metricas
+        self.update_metrics(iteration, scores)
+        
         for _ in self.population:
             # se seleccionan los padres en base a la distribucion de probabilidad dada por lo pesos
             parents = list(np.random.choice(len(self.population), size = 2, p = scores))
@@ -178,11 +182,29 @@ class genAlgorithm :
             new_population.append(new_indiv)
         
         self.population = new_population
+        
+        
+    def update_metrics(self, iter:int, scores:list[float]) -> list:
+        self.metrics = dict()
+        
+        self.metrics['iteration'] = iter
+        self.metrics['best_score'] = np.amax(scores)
+        
+        best_element_index = np.where(scores == self.metrics['best_score'])[0][0]
+        best_element = self.population[best_element_index]
+        
+        self.metrics['best_result'] = dict()
+        
+        for v, var in enumerate(best_element):
+            self.metrics['best_result'][str(self.variables[v])] = decode_2_float(var)        
+        
+        
+    def run(self, verbose:bool = True):
+        for i in range(self.n_generations):
+            self.next_gen(i)
+            if verbose:
+                print(self.metrics)
     
-    
-    #######################################################
-    # MATPLOT
-    #######################################################
         
 
 def decode_2_float(num) -> float:

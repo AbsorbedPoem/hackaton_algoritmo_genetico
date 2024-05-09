@@ -16,6 +16,7 @@ def create_plot(f:Expr, name:str, limits:list, density:int = 50) -> figure.Figur
     
     symbols = []
              
+    # reading symbols
     if f.has(x) and not(x in symbols):
         symbols.append(x)
     if f.has(y) and not(y in symbols):
@@ -25,8 +26,8 @@ def create_plot(f:Expr, name:str, limits:list, density:int = 50) -> figure.Figur
     if f.has(w) and not(w in symbols):
         symbols.append(w)
     
+    # 2D function
     if len(symbols) == 1:
-        #2D function
         X = np.linspace(*limits, density)
         Y = [eval_f(f, symbols, [x]) for x in X]
         
@@ -40,8 +41,8 @@ def create_plot(f:Expr, name:str, limits:list, density:int = 50) -> figure.Figur
             variable = symbols[0]
             )
 
+    # 3D function                
     if len(symbols) == 2:
-        #3D function                
         X = np.linspace(*limits, density)
         Y = np.linspace(*limits, density)
         X, Y = np.meshgrid(X, Y)
@@ -87,3 +88,7 @@ def custom_plot_3d(ax:axes.Axes, x, y, z, title:str, variables:list) -> axes.Axe
     ax.set_title(title)
     ax.set_xlabel("Eje " + str(variables[0]))
     ax.set_ylabel("Eje " + str(variables[1]))
+    
+    
+def save_plot_at_location(figure:figure.Figure, filename:str, dpi):
+    figure.savefig(f'./../static/rendered_plots/{filename}.png', dpi=dpi)
