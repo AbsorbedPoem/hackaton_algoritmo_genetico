@@ -1,0 +1,74 @@
+.variable {
+    height: 20px;
+    display: inline-block;
+    margin-right: 5px;
+    border: 1px solid black;
+}
+
+.highlight {
+    background-color: rgb(143, 143, 137);
+
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2; 
+    padding: 20px;
+    width: 100%;
+}
+.variables-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2; 
+    padding: 20px;
+    width: 50%;
+}
+.superparametros-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2; 
+    padding: 20px;
+    width: 100%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+
+.input-group label, .input-group input, .input-group div {
+    margin-bottom: 10px;
+}
+
+.variables-container div, .superparametros-container div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+}
