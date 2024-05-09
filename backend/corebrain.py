@@ -1,18 +1,24 @@
 import numpy as np
-import sympy
 import matplotlib.pyplot as plt
+from matplotlib import cm, axes, figure
+from mpl_toolkits.mplot3d.axes3d import get_test_data
+
 from pyrecorder.recorder import Recorder
 from pyrecorder.writers.gif import GIF
+
+import sympy
 from sympy import sympify
 from sympy.abc import x, y, z, w
 
 class genAlgorithm :
     
-    def __init__(self, n_indivs = 100, n_generations = 15, mutation_rate = .15, limits = [-5,5]):
+    def __init__(self, n_indivs:int = 100, n_generations:int = 15, mutation_rate:float = .15, limits:list[float | int] = [-5, 5]):
         
         self.n_indivs:int = n_indivs
         self.n_generations:int = n_generations
         self.mutation_rate:float = mutation_rate
+        
+        self.limits:list[float] = limits
         
         self.gen_pool:dict = {
             "integer" : list(range(limits[0]+1, limits[1])),
@@ -61,15 +67,15 @@ class genAlgorithm :
         dentro de las funciones existentes, y les añade la prioridad 1\
         por defecto para la suma ponderada"""
         
-        for f in self.functions:            
-            if f.has(x) and not('x' in self.variables):
-                self.variables.append('x')
-            if f.has(y) and not('y' in self.variables):
-                self.variables.append('y')
-            if f.has(z) and not('z' in self.variables):
-                self.variables.append('z')
-            if f.has(w) and not('w' in self.variables):
-                self.variables.append('w')
+        for f in self.functions:
+            if f.has(x) and not(x in self.variables):
+                self.variables.append(x)
+            if f.has(y) and not(y in self.variables):
+                self.variables.append(y)
+            if f.has(z) and not(z in self.variables):
+                self.variables.append(z)
+            if f.has(w) and not(w in self.variables):
+                self.variables.append(w)
 
     
     #######################################################
@@ -123,7 +129,6 @@ class genAlgorithm :
         """Fisiona individuos padres, para generar un nuevo hijo a partir de sus fragmentos"""
         descendent = []
         for i in range(len(indiv[0])):
-            print(i)
             fis_point = np.random.randint(self.n_indivs)
             descendent.append(indiv[0][i][:fis_point] + indiv[1][i][fis_point:])
         return descendent
@@ -138,21 +143,14 @@ class genAlgorithm :
                     indiv[i] = indiv[i][0:j] + [mutated_gen] + indiv[i][j + 1:]
         return indiv
 
-    
-    #######################################################
-    # VISUALIZACION
-    #######################################################
-    
-    
-    
-    
+
     
     #######################################################
     # MAIN LOOP
     #######################################################
     
     
-    def next_gen(self) -> None:
+    def next_gen(self, verbose = False) -> None:
         """main loop del avance de una generación"""
         new_population = []
         scrs = []
@@ -185,10 +183,7 @@ class genAlgorithm :
     #######################################################
     # MATPLOT
     #######################################################
-
-
-
-
+        
 
 def decode_2_float(num) -> float:
     """Decodifica los 15 genes de un individuo en un número flotante"""
@@ -205,9 +200,3 @@ def decode_2_float(num) -> float:
             r = decimal + (-1*num[0])
             r = -1*r
     return r
-        
-
-
-gen_system = genAlgorithm(
-    n_indivs = 6
-)
