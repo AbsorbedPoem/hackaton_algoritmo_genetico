@@ -12,62 +12,120 @@
 </head>
   <body>
     <h2>Formulario de Ecuaciones</h2>
-    <form action="">
-        <div class="input-container">
-            <div class="input-group">
-                <label for="ecuacion1">Input de ecuación 1:</label><br>
-                <input type="text" id="ecuacion1" name="ecuacion1" oninput="highlightVariables(this.value)"><br>
-                <div>
-                    <input type="radio" id="max1" name="opt1" value="max1">
-                    <label for="max1">Maximizar</label><br>
-                    <input type="radio" id="min1" name="opt1" value="min1">
-                    <label for="min1">Minimizar</label><br>
+    <form>
+        <div class="card p-4 shadow-sm mb-4 bg-silver">
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label for="ecuacion1">Input de ecuación 1:</label><br>
+                    <input class="form-control border-secondary" type="text" id="ecuacion1" name="ecuacion1" oninput="highlightVariables(this.value)" placeholder="e.j. x**2 + 1">
+                    <div class="d-flex justify-content-start">
+    
+                        <div class="me-3">
+                            <input type="radio" id="max1" name="opt1" value="max1" checked>
+                            <label for="max1">Maximizar</label><br>
+                        </div>
+                        
+                        <div>
+                            <input type="radio" id="min1" name="opt1" value="min1">
+                            <label for="min1">Minimizar</label><br>
+                        </div>
+    
+                    </div>
                 </div>
-                <label for="ecuacion2">Input de ecuación 2:</label><br>
-                <input type="text" id="ecuacion2" name="ecuacion2" oninput="highlightVariables(this.value)"><br>
-                <div>
-                    <input type="radio" id="max2" name="opt2" value="max2">
-                    <label for="max2">Maximizar</label><br>
-                    <input type="radio" id="min2" name="opt2" value="min2">
-                    <label for="min2">Minimizar</label><br>
+
+                <div class="col-6 mb-3">
+                    <label for="ecuacion2">Input de ecuación 2:</label><br>
+                    <input class="form-control border-secondary" type="text" id="ecuacion2" name="ecuacion2" oninput="highlightVariables(this.value)">
+                    <div class="d-flex justify-content-start">
+                        
+                        <div class="me-3">
+                            <input type="radio" id="max2" name="opt2" value="max2" checked>
+                            <label for="max2">Maximizar</label><br>
+                        </div>
+                        
+                        <div class="me-3">
+                            <input type="radio" id="min2" name="opt2" value="min2">
+                            <label for="min2">Minimizar</label><br>
+                        </div>
+                    
+                    </div>
                 </div>
-                <label for="ecuacion3">Input de ecuación 3:</label><br>
-                <input type="text" id="ecuacion3" name="ecuacion3" oninput="highlightVariables(this.value)"><br>
-                <div> 
-                    <input type="radio" id="max3" name="opt3" value="max3">
-                    <label for="max3">Maximizar</label><br>
-                    <input type="radio" id="min3" name="opt3" value="min3">
-                    <label for="min3">Minimizar</label><br>
+
+                <div class="col-6 mb-3">
+                    <label for="ecuacion3">Input de ecuación 3:</label><br>
+                    <input class="form-control border-secondary" type="text" id="ecuacion3" name="ecuacion3" oninput="highlightVariables(this.value)">
+                    <div class="d-flex justify-content-start"> 
+                        
+                        <div class="me-3">
+                            <input type="radio" id="max3" name="opt3" value="max3" checked>
+                            <label for="max3">Maximizar</label><br>
+                        </div>
+                        
+                        <div class="me-3">
+                            <input type="radio" id="min3" name="opt3" value="min3">
+                            <label for="min3">Minimizar</label><br>
+                        </div>
+
+                    </div>
                 </div>
-                <label for="ecuacion4">Input de ecuación 4:</label><br>
-                <input type="text" id="ecuacion4" name="ecuacion4" oninput="highlightVariables(this.value)"><br>
-                <div>
-                    <input type="radio" id="max4" name="opt4" value="max4">
-                    <label for="max4">Maximizar</label><br>
-                    <input type="radio" id="min4" name="opt4" value="min4">
-                    <label for="min4">Minimizar</label><br>
+
+                <div class="col-6 mb-3">
+                    <label for="ecuacion4">Input de ecuación 4:</label><br>
+                    <input class="form-control border-secondary" type="text" id="ecuacion4" name="ecuacion4" oninput="highlightVariables(this.value)">
+                    <div class="d-flex justify-content-start">
+                        
+                        <div class="me-3">
+                            <input type="radio" id="max4" name="opt4" value="max4" checked>
+                            <label for="max4">Maximizar</label><br>
+                        </div>
+                        
+                        <div class="me-3">
+                            <input type="radio" id="min4" name="opt4" value="min4">
+                            <label for="min4">Minimizar</label><br>
+                        </div>
+                    
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="variables-container">
-            <div>
-                <p>Variables:</p>
+        <div class="card p-4 shadow-sm mb-4 bg-silver">
+            <div class="row">
+                <div class="col-6">
+
+                    <h4>Variables:</h4>
+                    <div>
+                        <div id="x" class="variable" style="width: 20px"></div>
+                        <label for="x">X</label>
+                    </div>
+                    <div>
+                        <div id="y" class="variable" style="width: 20px"></div>
+                        <label for="y">y</label>
+                    </div>
+                    <div>
+                        <div id="z" class="variable" style="width: 20px"></div>
+                        <label for="z">z</label>
+                    </div>
+                    <div>
+                        <div id="w" class="variable" style="width: 20px"></div>
+                        <label for="w">w</label>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <h4>Superparámetros:</h4>
+
+                    <label for="tamanoPoblacion">Tamaño de población:</label><br>
+                    <input class="form-control border-secondary" type="text" id="tamanoPoblacion" name="tamanoPoblacion"><br>
+
+                    <label for="numeroIteraciones">Número de iteraciones:</label><br>
+                    <input class="form-control border-secondary" type="text" id="numeroIteraciones" name="numeroIteraciones"><br>
+
+                    <!-- <input type="submit" value="Generar vista histórica"> -->
+                    <button class="btn btn-outline-dark">Generar vista histórica</button>
+                    <!-- <input class="form-control border-secondary" type="submit" value="Generar resultado"> -->
+                    <input type="submit" class="btn btn-outline-dark ms-3" value="Generar resultado">
+                </div>
             </div>
-            <div id="x" class="variable"></div><label for="x">X</label><br>
-            <div id="y" class="variable"></div><label for="y">y</label><br>
-            <div id="z" class="variable"></div><label for="z">z</label><br>
-            <div id="w" class="variable"></div><label for="w">w</label><br>
-        </div>
-        <div class="superparametros-container">
-            <div>
-                <p>Superparámetros:</p>
-            </div>
-            <label for="tamanoPoblacion">Tamaño de población:</label><br>
-            <input type="text" id="tamanoPoblacion" name="tamanoPoblacion"><br>
-            <label for="numeroIteraciones">Número de iteraciones:</label><br>
-            <input type="text" id="numeroIteraciones" name="numeroIteraciones"><br>
-            <input type="submit" value="Generar vista histórica">
-            <input type="submit" value="Generar resultado">
         </div>
     </form> 
   </body>

@@ -7,7 +7,7 @@ def eval_f(f:Expr, variables, values) -> float:
     """Evalúa un objeto Exp de sympify para devolver el resultado"""
     return f.subs(dict(zip(variables, values))).evalf()
 
-def create_plot(f:Expr, name:str, limits:list, density:int = 50) -> figure.Figure:
+def create_plot(fig:figure.Figure, plot_pos:list, f:Expr, name:str, limits:list, density:int = 50) -> figure.Figure:
     
     """Crea un objeto Figure a partir de una expresión matemática\
         de sympify y unos límites deternimados.\
@@ -31,7 +31,7 @@ def create_plot(f:Expr, name:str, limits:list, density:int = 50) -> figure.Figur
         X = np.linspace(*limits, density)
         Y = [eval_f(f, symbols, [x]) for x in X]
         
-        fig, ax = plt.subplots()
+        ax = fig.add_subplot(*plot_pos)
         
         custom_plot_2d(
             ax = ax,
@@ -55,8 +55,8 @@ def create_plot(f:Expr, name:str, limits:list, density:int = 50) -> figure.Figur
                     variables = symbols,
                     values = [X[i, j], Y[i, j]]
                 )
-                
-        fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+        
+        ax = fig.add_subplot(*plot_pos, projection = "3d")
         
         custom_plot_3d(
             ax = ax,
@@ -66,8 +66,6 @@ def create_plot(f:Expr, name:str, limits:list, density:int = 50) -> figure.Figur
             title = name,
             variables = symbols
         )
-    
-    return fig
     
 
 def custom_plot_2d(ax:axes.Axes, x, y, title:str, variable):
