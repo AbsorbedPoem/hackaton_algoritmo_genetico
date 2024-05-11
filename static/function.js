@@ -5,8 +5,8 @@ function highlightVariables() {
         document.getElementById('ecuacion2').value,
         document.getElementById('ecuacion3').value,
         document.getElementById('ecuacion4').value,
-        
     ];
+
     for (var i = 0; i < variables.length; i++) {
         var element = document.getElementById(variables[i]);
         if (equations.some(equation => equation.includes(variables[i]))) {
@@ -17,16 +17,6 @@ function highlightVariables() {
     }
 
 }
-
-// var answerSpan = document.getElementById('abc');
-// var answerMathField = MQ.MathField(answerSpan, {
-//   handlers: {
-//     edit: function() {
-//       var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
-//       checkAnswer(enteredMath);
-//     }
-//   }
-// });
 
 document.addEventListener('DOMContentLoaded', function(){
     var mathFieldSpan = document.getElementById('abc');
