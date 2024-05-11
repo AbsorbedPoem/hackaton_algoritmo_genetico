@@ -15,5 +15,17 @@ function highlightVariables() {
             element.classList.remove('highlight');
         }
     }
+
+}
+
+var MQ = MathQuill.getInterface(2);
+
+var answerSpan = document.getElementById('ecuacion4');
+var answerMathField = MQ.MathField(answerSpan, {
+  handlers: {
+    edit: function() {
+      var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
+      checkAnswer(enteredMath);
+    }
   }
-  
+});
