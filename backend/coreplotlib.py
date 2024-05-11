@@ -33,7 +33,7 @@ def create_plot(fig:figure.Figure, plot_pos:list, f:Expr, name:str, limits:list,
         
         ax = fig.add_subplot(*plot_pos)
         
-        custom_plot_2d(
+        return custom_plot_2d(
             ax = ax,
             x = X,
             y = Y,
@@ -58,7 +58,7 @@ def create_plot(fig:figure.Figure, plot_pos:list, f:Expr, name:str, limits:list,
         
         ax = fig.add_subplot(*plot_pos, projection = "3d")
         
-        custom_plot_3d(
+        return custom_plot_3d(
             ax = ax,
             x = X,
             y = Y,
@@ -68,13 +68,15 @@ def create_plot(fig:figure.Figure, plot_pos:list, f:Expr, name:str, limits:list,
         )
     
 
-def custom_plot_2d(ax:axes.Axes, x, y, title:str, variable):
+def custom_plot_2d(ax:axes.Axes, x, y, title:str, variable) -> axes.Axes:
     """Caso donde requiere crear un plot de una curva"""
     ax.plot(x, y)
     ax.grid()
     ax.set_title(title)
     ax.set_xlabel("Eje " + str(variable))
     ax.set_ylabel(f'f({str(variable)})')
+    
+    return ax
         
         
 def custom_plot_3d(ax:axes.Axes, x, y, z, title:str, variables:list) -> axes.Axes:
@@ -86,6 +88,18 @@ def custom_plot_3d(ax:axes.Axes, x, y, z, title:str, variables:list) -> axes.Axe
     ax.set_title(title)
     ax.set_xlabel("Eje " + str(variables[0]))
     ax.set_ylabel("Eje " + str(variables[1]))
+    
+    return ax
+    
+    
+    
+def create_historic_view(fig:figure.Figure, history:dict, generations:int) -> figure.Figure:
+    progress = [h['best_score'] for h in history]
+    ax = fig.add_subplot()
+    ax.plot(list(range(generations)), progress)
+    ax.grid()
+    ax.set_title("Evolución del mejor resultado")
+    return fig
     
     
 def save_plot_at_location(figure:figure.Figure, filename:str, dpi):

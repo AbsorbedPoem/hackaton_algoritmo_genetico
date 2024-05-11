@@ -1,0 +1,1 @@
+{"names": ["Funcion 1", "Funcion 2", "Funcion 3"], "limits": [-10, 10], "f": ["38*x + 5", "y**3 + cos(x) + 5", "38*(y - 3)**3 + 4.33"]}
