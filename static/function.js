@@ -18,14 +18,27 @@ function highlightVariables() {
 
 }
 
-var MQ = MathQuill.getInterface(2);
+// var answerSpan = document.getElementById('abc');
+// var answerMathField = MQ.MathField(answerSpan, {
+//   handlers: {
+//     edit: function() {
+//       var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
+//       checkAnswer(enteredMath);
+//     }
+//   }
+// });
 
-var answerSpan = document.getElementById('ecuacion4');
-var answerMathField = MQ.MathField(answerSpan, {
-  handlers: {
-    edit: function() {
-      var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
-      checkAnswer(enteredMath);
-    }
-  }
-});
+document.addEventListener('DOMContentLoaded', function(){
+    var mathFieldSpan = document.getElementById('abc');
+    var latexSpan = document.getElementById('latex');
+    
+    var MQ = MathQuill.getInterface(2); // for backcompat
+    var mathField = MQ.MathField(mathFieldSpan, {
+        spaceBehavesLikeTab: true, // configurable
+        handlers: {
+        edit: function() { // useful event handlers
+            latexSpan.textContent = mathField.latex(); // simple API
+        }
+        }
+    });
+})
