@@ -1,15 +1,13 @@
 import numpy as np
-from mpl_toolkits.mplot3d.axes3d import get_test_data
-
-from pyrecorder.recorder import Recorder
-from pyrecorder.writers.gif import GIF
 
 import sympy
-from sympy import sympify
+from sympy import sympify, lambdify
 from sympy.abc import x, y, z, w
 
 from matplotlib import pyplot as plt
-from coreplotlib import create_plot
+from coreplotlib import create_historic_view, save_plot_at_location
+
+import json
 
 class genAlgorithm :
     
@@ -28,7 +26,9 @@ class genAlgorithm :
         
         self.variables:list = list()
         self.functions:list[sympy.Expr] = []
+        self.functions_names:list[str] = []
         self.priorities:list[float] = []
+        
         self.population:list = []
         
         self.metrics:list = dict()
@@ -56,11 +56,15 @@ class genAlgorithm :
         except ValueError:
             return False
     
-    def append_function(self, function:str, priority:float = 1) -> bool:
+    def append_function(self, function:str, name:str = '', priority:float = 1) -> bool:
         """Añade una función objetivo, sobre las cuales se evaluará la suma ponderada"""
         try:
             f = sympify(function)
             self.functions.append(f)
+            if (name == ''):
+                self.functions_names.append(f'Funcion {len(self.functions)}')
+            else:
+                self.functions_names.append(name)
             self.priorities.append(priority)
             self.check_variables()
             return True
@@ -126,27 +130,27 @@ class genAlgorithm :
     #######################################################
     # CRUZAMIENTO Y MUTACION
     #######################################################
-    
-    
-    def get_score(self, indiv:list, indiv_index:int, iteration:int) -> float:
         
-        """ Revisa un individuo y obtiene el puntaje, ademas de almacenas los\
-        resultados en las variables np_variables y np_values para la posterior\
-        generación de gráficos """
-        
-        score = 0
-        vars = dict.fromkeys(self.variables, True)
     
-        for i, var in enumerate(vars):
-            vars[var] = decode_2_float(indiv[i])
-            self.np_variables[iteration, indiv_index, i] = vars[var]
+    def prepare_inputs(self, iteration:int) -> None:
+        for i, indiv in enumerate(self.population):
+            for v, val in enumerate(indiv):
+                self.np_variables[iteration, v, i] = decode_2_float(val)
+    
+    
+    def get_per_f_scores(self, iteration:int) -> None:
+        for i, expr in enumerate(self.functions):
+            f = lambdify([self.variables], expr, "numpy")
             
-        for i in range(len(self.functions)):
-            s = self.eval_f(index = i, args = vars) * self.priorities[i]
-            self.np_values[iteration, indiv_index, i] = s
-            score += s
+            
+            
+            self.np_values[iteration, i] = f(self.np_variables[iteration])
+            
+    def get_scores(self, scores:np.ndarray):
+        for i in range(scores.shape[0]):
+            scores[i] = scores[i] * self.priorities[i]
         
-        return score
+        return scores.sum(axis = 0)
     
     
     def binary_fision(self, indiv:list) -> list:
@@ -179,8 +183,8 @@ class genAlgorithm :
             indica si se quieren o no imprimir los resultados de las iteraciones. \
             El argumento display_plots decide si generar o no un gráfico de histórico mas un gif de avance"""
             
-        self.np_variables = np.zeros((self.n_generations, self.n_indivs, len(self.variables)), dtype='float64')
-        self.np_values = np.zeros((self.n_generations, self.n_indivs, len(self.functions)), dtype='float64')
+        self.np_variables = np.zeros((self.n_generations, len(self.variables), self.n_indivs), dtype='float64')
+        self.np_values = np.zeros((self.n_generations, len(self.functions), self.n_indivs), dtype='float64')
             
         # vuelta principal
         for i in range(self.n_generations):
@@ -189,33 +193,32 @@ class genAlgorithm :
                 verbose = verbose,
                 display_plots = True
             )
-            if verbose:
-                print(i)
-                
-        # Generación del gráfico de histórico
+            
+        # variables json para la generacion del gif
+        self.update_gif_data()
+            
+        # Creación del gráfico histórico
+        fig = create_historic_view(plt.figure(), self.history, self.n_generations)
+        save_plot_at_location(fig, 'historico', 100)
         
         # Guardadndo en archivos binarios
-        np.save(f'./../static/temp/raw_vars.png', self.np_variables)
-        np.save(f'./../static/temp/raw_vals.png', self.np_values)
+        np.save('./../static/temp/raw_vars', self.np_variables)
+        np.save('./../static/temp/raw_vals', self.np_values)
     
     
     def next_gen(self, iteration:int, verbose = True, display_plots = True) -> None:
         """main loop del avance de una generación"""
         new_population = []
-        scrs = []
         
-        # los scores son el valor "fitness" de cada individuo,
-        # por lo que se almacenan para hacer una selección ponderada
-        for i, indiv in enumerate(self.population):
-            scrs.append(self.get_score(
-                indiv = indiv,
-                indiv_index = i,
-                iteration = iteration
-                )
-            )
+        # preparacion de los geneses en floats, en un numpy array
+        self.prepare_inputs(iteration = iteration)
+        # calculo de la funcion sobre los arrays
+        self.get_per_f_scores(iteration = iteration)
+        # suma de los puntajes de la funciones para obtener el fitness
+        scores = self.get_scores(self.np_values[iteration])
+        
         
         # control de metricas
-        scores:np.ndarray = np.array(scrs, dtype='float64')
         self.update_metrics(iteration, scores, verbose)
             
         # los pesos deben estar normalizados para usar el algoritmo de selección
@@ -263,34 +266,22 @@ class genAlgorithm :
             print(metrics)
             
             
-    #######################################################
-    # VISUALIZATION
-    #######################################################
+    def update_gif_data(self) -> None:
+        data = dict()
+        data['names'] = self.functions_names
+        data['limits'] = self.limits
+        data['f'] = []
+        
+        for i, f in enumerate(self.functions):
+            data['f'].append(str(f))
+        
+        with open(f'./../static/temp/data.json', 'w') as fp:
+            json.dump(data, fp)
+
             
-            
-    # def display_plots(self):
-        
-    #     grid = (2,2)
-    #     poss = ((0,0), (0,1), (1,0), (1,1))
-        
-    #     fig, axs = plt.subplots(*grid)
-        
-    #     for i, pos in enumerate(poss):
-    #         axs[*pos].remove()
-    #         if 0 <= i < len(self.functions):
-    #             custom_ax = create_plot(
-    #             fig = fig,
-    #             plot_pos = [*grid, i+1],
-    #             f = self.functions[i],
-    #             name = f'Función {i+1}',
-    #             limits = self.limits,
-    #     )
-        
-    #     fig.tight_layout()
-    
         
 
-def decode_2_float(num) -> float:
+def decode_2_float(num:list) -> float:
     """Decodifica los 15 genes de un individuo en un número flotante"""
     decimal = 0
     j = 0
