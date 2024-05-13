@@ -9,6 +9,8 @@ from coreplotlib import create_historic_view, save_plot_at_location
 
 import json
 
+import coreplotlib
+
 class genAlgorithm :
     
     def __init__(self, n_indivs:int = 100, n_generations:int = 5, mutation_rate:float = .05, limits:list[float | int] = [-5, 5]):
@@ -296,3 +298,46 @@ def decode_2_float(num:list) -> float:
             r = decimal + (-1*num[0])
             r = -1*r
     return r
+
+def is_valid_function(f:str, name:str, limits:list[float]):
+    try:
+        # Verificacion de la funcion
+        f = sympify(function)
+        has = []
+        
+        deny_pool = [
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "v",
+            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"
+        ]
+        accept_pool = [
+            'x', 'y', 'z', 'w'
+        ]
+        
+        for symbol in deny_pool:
+            if f.has(symbol):
+                raise ValueError('')
+        for symbol in accept_pool:
+            if f.has(symbol):
+                has.append(symbol)
+                
+        if len(has) == 0:
+            raise ValueError('')
+        
+        # Creacion del plot de la funcion
+        fig = plt.figure()
+        
+        fig = coreplotlib.create_plot(
+            fig = fig,
+            plot_pos = [0],
+            f = f,
+            name = name,
+            limits = limits,
+            density = 100
+        )
+        
+        coreplotlib.save_plot_at_location(figure = fig, filename = name)
+        
+        return json.dumps(has)
+    
+    except ValueError:
+        return False
