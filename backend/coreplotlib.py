@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from matplotlib import pyplot as plt, axes, figure
 from sympy import Expr
@@ -103,4 +104,4 @@ def create_historic_view(fig:figure.Figure, history:dict, generations:int) -> fi
     
     
 def save_plot_at_location(figure:figure.Figure, filename:str, dpi):
-    figure.savefig(f'./../static/rendered_plots/{filename}.png', dpi=dpi)
+    figure.savefig(os.path.dirname(os.path.abspath(__file__))+f'\\..\\static\\rendered_plots\\{filename}.png', dpi=dpi)

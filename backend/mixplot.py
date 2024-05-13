@@ -11,9 +11,9 @@ import json
 import os
             
 def create_mix_plot():
-    vars:np.ndarray = np.load(os.getcwd()+'\\..\\static\\temp\\raw_vars.npy')
-    vals:np.ndarray = np.load(os.getcwd()+'\\..\\static\\temp\\raw_vals.npy')
-    with open(os.getcwd()+'\\..\\static\\temp\\data.json') as JSON:
+    vars:np.ndarray = np.load(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\raw_vars.npy')
+    vals:np.ndarray = np.load(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\raw_vals.npy')
+    with open(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\data.json') as JSON:
         data:dict = json.load(JSON)
 
     for i, f in enumerate(data['f']):

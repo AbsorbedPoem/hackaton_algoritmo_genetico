@@ -1,15 +1,16 @@
+import os
 import numpy as np
 
 import sympy
 from sympy import sympify, lambdify
 from sympy.abc import x, y, z, w
 
+from matplotlib import use
+use('agg')
 from matplotlib import pyplot as plt
-from coreplotlib import create_historic_view, save_plot_at_location
+from coreplotlib import create_plot, create_historic_view, save_plot_at_location
 
 import json
-
-import coreplotlib
 
 class genAlgorithm :
     
@@ -187,6 +188,8 @@ class genAlgorithm :
             
         self.np_variables = np.zeros((self.n_generations, len(self.variables), self.n_indivs), dtype='float64')
         self.np_values = np.zeros((self.n_generations, len(self.functions), self.n_indivs), dtype='float64')
+        
+        self.create_population()
             
         # vuelta principal
         for i in range(self.n_generations):
@@ -204,8 +207,8 @@ class genAlgorithm :
         save_plot_at_location(fig, 'historico', 100)
         
         # Guardadndo en archivos binarios
-        np.save('./../static/temp/raw_vars', self.np_variables)
-        np.save('./../static/temp/raw_vals', self.np_values)
+        np.save(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\raw_vars', self.np_variables)
+        np.save(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\raw_vals', self.np_values)
     
     
     def next_gen(self, iteration:int, verbose = True, display_plots = True) -> None:
@@ -277,9 +280,8 @@ class genAlgorithm :
         for i, f in enumerate(self.functions):
             data['f'].append(str(f))
         
-        with open(f'./../static/temp/data.json', 'w') as fp:
+        with open(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\data.json', 'w') as fp:
             json.dump(data, fp)
-
             
         
 
@@ -299,10 +301,15 @@ def decode_2_float(num:list) -> float:
             r = -1*r
     return r
 
-def is_valid_function(f:str, name:str, limits:list[float]):
+
+def is_valid_function(f:str, nombre:str, limites:list[float]):
+    
+    # Debug
+    limites = [0, 4]
+    
     try:
         # Verificacion de la funcion
-        f = sympify(function)
+        f:sympy.Expr = sympify(f)
         has = []
         
         deny_pool = [
@@ -314,10 +321,10 @@ def is_valid_function(f:str, name:str, limits:list[float]):
         ]
         
         for symbol in deny_pool:
-            if f.has(symbol):
+            if f.has(sympy.symbols(symbol)):
                 raise ValueError('')
         for symbol in accept_pool:
-            if f.has(symbol):
+            if f.has(sympy.symbols(symbol)):
                 has.append(symbol)
                 
         if len(has) == 0:
@@ -326,18 +333,18 @@ def is_valid_function(f:str, name:str, limits:list[float]):
         # Creacion del plot de la funcion
         fig = plt.figure()
         
-        fig = coreplotlib.create_plot(
+        create_plot(
             fig = fig,
-            plot_pos = [0],
+            plot_pos = [1, 1, 1],
             f = f,
-            name = name,
-            limits = limits,
+            name = nombre,
+            limits = limites,
             density = 100
         )
         
-        coreplotlib.save_plot_at_location(figure = fig, filename = name)
+        save_plot_at_location(figure = fig, filename = nombre, dpi = 200)
         
-        return json.dumps(has)
+        return f"<b>{f}</b> tiene: "+json.dumps(has)
     
     except ValueError:
         return False
