@@ -32,11 +32,14 @@ def mostrar_resultados():
         "n_individuos" : 500,
         "n_generaciones" : 50,
         "ratio_mutacion" : 0.0005,
-        "limites" : [-10, 10],
         "funcs" : [
             "38*x + 5",
             "cos(x)*500 + y**3 + 20*x",
             "0.8*((-y)+3)**3 + 4.33"
+        ],
+        "limites" : [
+            [0, 10],
+            [0, 20],
         ],
         "nombres" : [
             "funciona 1",
@@ -80,16 +83,26 @@ def mostrar_resultados():
     
     return json.dumps(mejor_resultado)
  
-@app.route('/es_funcion_valida/', methods=['GET'])
+@app.route('/es_funcion_valida/', methods=['POST'])
 def es_valida():
     """ Llamada para verificar si una funcion tipeada en el input es válida y tiene las variables necesitadas """
-    funcion = request.args.get('funcion')
-    nombre = request.args.get('nombre')
-    limites = request.args.get('limites')
+    data = json.loads(request.form.get('data'))
     
+    # funcion:str = fr"{repr(data['funcion'])}"
+    funcion:str = data['funcion']
+    # funcion = r"x^2 + \frac{4}{5}"
+    # funcion = funcion.replace('\\', '\\')
+    
+    nombre = data['nombre']
+    limites = data['limites']
+    
+    result = dict()
     result = corebrain.is_valid_function(funcion, nombre, limites)
-    if result != False:
-        return result
+    
+    if result == "faltan":
+        return "faltan"
+    elif result != False:
+        return json.dumps({"tiene" : result, "url" : f"/static/rendered_plots/{nombre}.png"})
     else:
         return "fail"
 

@@ -13,6 +13,7 @@ import os
 def create_mix_plot():
     vars:np.ndarray = np.load(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\raw_vars.npy')
     vals:np.ndarray = np.load(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\raw_vals.npy')
+    
     with open(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\temp\\data.json') as JSON:
         data:dict = json.load(JSON)
 
@@ -65,7 +66,7 @@ def create_mix_plot():
         return fig, *scaters
                 
     ani = animation.FuncAnimation(fig=fig, func=update, frames = vars.shape[0], interval=30)
-    ani.save('./../static/rendered_plots/animacion.gif', dpi=200, fps=6)
+    ani.save(os.path.dirname(os.path.abspath(__file__))+'\\..\\static\\rendered_plots\\animacion.gif', dpi=200, fps=6)
     
     fig.tight_layout()
     

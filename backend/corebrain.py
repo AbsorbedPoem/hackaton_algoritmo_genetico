@@ -12,20 +12,26 @@ from coreplotlib import create_plot, create_historic_view, save_plot_at_location
 
 import json
 
+from latex2sympy2 import latex2sympy
+
 class genAlgorithm :
     
-    def __init__(self, n_indivs:int = 100, n_generations:int = 5, mutation_rate:float = .05, limits:list[float | int] = [-5, 5]):
+    def __init__(self, n_indivs:int = 100, n_generations:int = 5, mutation_rate:float = .05):
         
         self.n_indivs:int = n_indivs
         self.n_generations:int = n_generations
         self.mutation_rate:float = mutation_rate
         
-        self.limits:list[float] = limits
+        self.limits:dict = dict()
+        self.gen_pool:dict = dict()
         
-        self.gen_pool:dict = {
-            "integer" : list(range(limits[0]+1, limits[1])),
-            "decimal" : list(range(-9, 10))
-        }
+        # for i, _ in enumerate(limits):
+        #     self.gen_pool.append(
+        #         {
+        #             "integer" : list(range(limits[i][0] + 1, limits[i][1])),
+        #             "decimal" : list(range(-9, 10))
+        #         }
+        #     )
         
         self.variables:list = list()
         self.functions:list[sympy.Expr] = []
@@ -59,6 +65,7 @@ class genAlgorithm :
         except ValueError:
             return False
     
+    
     def append_function(self, function:str, name:str = '', priority:float = 1) -> bool:
         """Añade una función objetivo, sobre las cuales se evaluará la suma ponderada"""
         try:
@@ -73,7 +80,16 @@ class genAlgorithm :
             return True
         except ValueError:
             raise Exception("formato inválido para funcion, intenta corregir signos de puntuación, o ser mas explícito")
-        
+    
+    def append_limits(self, limits):
+        """Añade los límites de funcion"""
+        for var in limits:
+            if var in [str(v) for v in self.variables]:
+                self.limits[var] = limits[var]
+                self.gen_pool[var] = {
+                    "integer" : list(range(limits[var][0] + 1, limits[var][1])),
+                    "decimal" : list(range(-9, 10))
+                }
         
     def eval_f(self, index:int, args:dict) -> float:
         """Evalúa la funcion objetivo del índice i (lista de funciones), y retorna el resultado"""
@@ -107,13 +123,13 @@ class genAlgorithm :
         """Genera un nuevo individuo"""
         indiv = []
         
-        for _ in self.variables:
+        for var in self.variables:
             indiv.append(
                 [
-                    np.random.choice(self.gen_pool["integer"])
+                    np.random.choice(self.gen_pool[str(var)]["integer"])
                 ] +\
                 list(np.random.choice(
-                    self.gen_pool["decimal"],
+                    self.gen_pool[str(var)]["decimal"],
                     14
                 ))
             )
@@ -167,10 +183,10 @@ class genAlgorithm :
     
     def mutate_indiv(self, indiv:list) -> list:
         """ Toma un conjunto de individuos y cambia algunos de sus genes en base a un factor de probabilidad """
-        for i in range(len(indiv)):
+        for i, var in enumerate(self.variables):
             for j in range(len(indiv[0])):
                 if np.random.random() < self.mutation_rate:
-                    mutated_gen = np.random.choice(self.gen_pool["decimal" if j > 0 else "integer"])
+                    mutated_gen = np.random.choice(self.gen_pool[str(var)]["decimal" if j > 0 else "integer"])
                     indiv[i] = indiv[i][0:j] + [mutated_gen] + indiv[i][j + 1:]
         return indiv
 
@@ -302,14 +318,13 @@ def decode_2_float(num:list) -> float:
     return r
 
 
-def is_valid_function(f:str, nombre:str, limites:list[float]):
-    
-    # Debug
-    limites = [0, 4]
+def is_valid_function(f:str, nombre:str, limites:list):
     
     try:
         # Verificacion de la funcion
+        f = latex2sympy(f)
         f:sympy.Expr = sympify(f)
+        # print(f)
         has = []
         
         deny_pool = [
@@ -333,7 +348,7 @@ def is_valid_function(f:str, nombre:str, limites:list[float]):
         # Creacion del plot de la funcion
         fig = plt.figure()
         
-        create_plot(
+        status = create_plot(
             fig = fig,
             plot_pos = [1, 1, 1],
             f = f,
@@ -341,10 +356,12 @@ def is_valid_function(f:str, nombre:str, limites:list[float]):
             limits = limites,
             density = 100
         )
+        if status == "faltan":
+            return "faltan"
         
         save_plot_at_location(figure = fig, filename = nombre, dpi = 200)
         
-        return f"<b>{f}</b> tiene: "+json.dumps(has)
+        return has
     
     except ValueError:
         return False

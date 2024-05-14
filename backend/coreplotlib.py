@@ -16,7 +16,7 @@ def create_plot(fig:figure.Figure, plot_pos:list, f:Expr, name:str, limits:list,
         añadir más plots al mismo, etc."""
     
     symbols = []
-             
+    
     # reading symbols
     if f.has(x) and not(x in symbols):
         symbols.append(x)
@@ -29,7 +29,11 @@ def create_plot(fig:figure.Figure, plot_pos:list, f:Expr, name:str, limits:list,
     
     # 2D function
     if len(symbols) == 1:
-        X = np.linspace(*limits, density)
+        if not str(symbols[0]) in limits:
+            return "faltan"
+        
+        print([*limits[str(symbols[0])], density])
+        X = np.linspace(*limits[str(symbols[0])], density)
         Y = [eval_f(f, symbols, [x]) for x in X]
         
         ax = fig.add_subplot(*plot_pos)
@@ -41,11 +45,15 @@ def create_plot(fig:figure.Figure, plot_pos:list, f:Expr, name:str, limits:list,
             title = name,
             variable = symbols[0]
             )
+    
 
     # 3D function                
     if len(symbols) == 2:
-        X = np.linspace(*limits, density)
-        Y = np.linspace(*limits, density)
+        if not str(symbols[0]) in limits or not str(symbols[1]) in limits:
+            return "faltan"
+        
+        X = np.linspace(*limits[str(symbols[0])], density)
+        Y = np.linspace(*limits[str(symbols[1])], density)
         X, Y = np.meshgrid(X, Y)
         Z = np.empty_like(X)
         

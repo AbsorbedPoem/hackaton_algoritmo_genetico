@@ -3,64 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://127.0.0.1:5500/static/jquery/jquery.min.js"></script>
+    <script src="/static/jquery/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="http://127.0.0.1:5500/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://127.0.0.1:5500/static/style.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
 
-    <script src="http://127.0.0.1:5500/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
     
-    <link rel="stylesheet" href="http://127.0.0.1:5500/static/mathquill/mathquill.css"/>
-    <script src="http://127.0.0.1:5500/static/mathquill/mathquill.js"></script>
+    <link rel="stylesheet" href="/static/mathquill/mathquill.css"/>
+    <script src="/static/mathquill/mathquill.js"></script>
     
     <script> var MQ = MathQuill.getInterface(2); </script>
     
-    <script src="http://127.0.0.1:5500/static/function.js"></script>
+    <script src="/static/js/function.js"></script>
     
     <title>Ecuaciones de 2do grado</title>
 </head>
   <body>
-    <h2>Formulario de Ecuaciones</h2>
+    <div class="display-5 fw-bold my-4">Formulario de Ecuaciones</div>
     <form>
-        <div class="card p-4 shadow-sm mb-4 bg-silver">
-            <div class="row">
-                <div class="col-6 mb-3">
-                    <label for="ecuacion1">Input de ecuación 1:</label><br>
-                    <!-- <input class="form-control border-secondary" type="text" id="ecuacion1" name="ecuacion1" oninput="highlightVariables(this.value)" placeholder="e.j. x**2 + 1">
-                    <div class="d-flex justify-content-start">
-    
-                        <div class="me-3">
-                            <input type="radio" id="max1" name="opt1" value="max1" checked>
-                            <label for="max1">Maximizar</label><br>
-                        </div>
-                        
-                        <div>
-                            <input type="radio" id="min1" name="opt1" value="min1">
-                            <label for="min1">Minimizar</label><br>
-                        </div>
-    
-                    </div> -->
-                    
-                    <p>Escribe <span id="abc">asd</span></p>
-                    <p>LaTex <span id="latex">asd</span></p>
+        <div class="">
+            <div class="row mx-0">
+                <div id="f1" class="col-6 mb-3">
+                    <div class="p-4 card shadow mb-4 bg-silver">
+                        <!-- es_valido -->
+                        <input class="es_valido" type="hidden" value="false">
 
-                    
-                    <div class="d-flex justify-content-start">
-    
-                        <div class="me-3">
-                            <input type="radio" id="max1" name="opt1" value="max1" checked>
-                            <label for="max1">Maximizar</label><br>
-                        </div>
+                        <input class="tiene-variables" type="hidden">
                         
-                        <div>
-                            <input type="radio" id="min1" name="opt1" value="min1">
-                            <label for="min1">Minimizar</label><br>
+                        <h3 class="text-center">Primera Función</h3>
+                        <!-- funcion -->
+                        <div>Escribe: <span class="funcion p-2 bg-white rounded d-block"></span></div>
+                        <!-- latex-preview -->
+                        <div class="small text-secondary mb-2">
+                            formato: <span class="latex-preview"></span>
                         </div>
+                        <!-- latex -->
+                        <input type="hidden" class="latex">
     
+    
+                        <label>Nombre de la función</label>
+                        <input type="text" class="form-control nombre border-secondary" placeholder="Escribe el nombre" value="Función 1">
+                        <div class="d-flex justify-content-start my-3">
+                            <div class="me-3">
+                                <input type="radio" class="max" name="opt1" checked>
+                                <label for="max1">Maximizar</label><br>
+                            </div>
+                            
+                            <div>
+                                <input type="radio" class="min" name="opt1">
+                                <label for="min1">Minimizar</label><br>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <img class="thumbnail border border-secondary" src="/static/img/default.png" style="width: 80%;">
+                        </div>
+                        <button type="button" class="btn btn-outline-dark w-100 mt-3" onclick="event.preventDefault(); window.verificar(0)">Verificar</button>
+                    </div>
+                </div>
+                <div id="f2" class="col-6 mb-3">
+                    <div class="p-4 card shadow mb-4 bg-silver">
+                        <!-- es_valido -->
+                        <input class="es_valido" type="hidden" value="false">
+
+                        <input class="tiene-variables" type="hidden">
+                        
+                        <h3 class="text-center titlee">Segunda Función</h3>
+                        <!-- funcion -->
+                        <div>Escribe: <span class="funcion p-2 bg-white rounded d-block"></span></div>
+                        <!-- latex-preview -->
+                        <div class="small text-secondary mb-2">
+                            formato: <span class="latex-preview"></span>
+                        </div>
+                        <!-- latex -->
+                        <input type="hidden" class="latex">
+    
+    
+                        <label>Nombre de la función</label>
+                        <input type="text" class="form-control nombre border-secondary" placeholder="Escribe el nombre" value="Función 2">
+                        <div class="d-flex justify-content-start my-3">
+                            <div class="me-3">
+                                <input type="radio" class="max" name="opt2" checked>
+                                <label for="max1">Maximizar</label><br>
+                            </div>
+                            
+                            <div>
+                                <input type="radio" class="min" name="opt2">
+                                <label for="min1">Minimizar</label><br>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <img class="thumbnail border border-secondary" src="/static/img/default.png" style="width: 80%;">
+                        </div>
+                        <button type="button" class="btn btn-outline-dark w-100 mt-3" onclick="event.preventDefault(); window.verificar(1)">Verificar</button>
+                    </div>
+                </div>
+                <div id="f3" class="col-6 mb-3">
+                    <div class="p-4 card shadow mb-4 bg-silver">
+                        <!-- es_valido -->
+                        <input class="es_valido" type="hidden" value="false">
+
+                        <input class="tiene-variables" type="hidden">
+                        
+                        <h3 class="text-center">Tercera Función</h3>
+                        <!-- funcion -->
+                        <div>Escribe: <span class="funcion p-2 bg-white rounded d-block"></span></div>
+                        <!-- latex-preview -->
+                        <div class="small text-secondary mb-2">
+                            formato: <span class="latex-preview"></span>
+                        </div>
+                        <!-- latex -->
+                        <input type="hidden" class="latex">
+    
+    
+                        <label>Nombre de la función</label>
+                        <input type="text" class="form-control nombre border-secondary" placeholder="Escribe el nombre" value="Función 3">
+                        <div class="d-flex justify-content-start my-3">
+                            <div class="me-3">
+                                <input type="radio" class="max" name="opt3" checked>
+                                <label for="max1">Maximizar</label><br>
+                            </div>
+                            
+                            <div>
+                                <input type="radio" class="min" name="opt3">
+                                <label for="min1">Minimizar</label><br>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <img class="thumbnail border border-secondary" src="/static/img/default.png" style="width: 80%;">
+                        </div>
+                        <button type="button" class="btn btn-outline-dark w-100 mt-3" onclick="event.preventDefault(); window.verificar(2)">Verificar</button>
+                    </div>
+                </div>
+                <div id="f4" class="col-6 mb-3">
+                    <div class="p-4 card shadow mb-4 bg-silver">
+                        <!-- es_valido -->
+                        <input class="es_valido" type="hidden" value="false">
+
+                        <input class="tiene-variables" type="hidden">
+                        
+                        <h3 class="text-center">Cuarta Función</h3>
+                        <!-- funcion -->
+                        <div>Escribe: <span class="funcion p-2 bg-white rounded d-block"></span></div>
+                        <!-- latex-preview -->
+                        <div class="small text-secondary mb-2">
+                            formato: <span class="latex-preview"></span>
+                        </div>
+                        <!-- latex -->
+                        <input type="hidden" class="latex">
+    
+    
+                        <label>Nombre de la función</label>
+                        <input type="text" class="form-control nombre border-secondary" placeholder="Escribe el nombre" value="Función 4">
+                        <div class="d-flex justify-content-start my-3">
+                            <div class="me-3">
+                                <input type="radio" class="max" name="opt4" checked>
+                                <label for="max1">Maximizar</label><br>
+                            </div>
+                            
+                            <div>
+                                <input type="radio" class="min" name="opt4">
+                                <label for="min1">Minimizar</label><br>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <img class="thumbnail border border-secondary" src="/static/img/default.png" style="width: 80%;">
+                        </div>
+                        <button type="button" class="btn btn-outline-dark w-100 mt-3" onclick="event.preventDefault(); window.verificar(3)">Verificar</button>
                     </div>
                 </div>
 
-                <div class="col-6 mb-3">
+                <!-- <div class="col-6 mb-3">
                     <label for="ecuacion2">Input de ecuación 2:</label><br>
                     <input class="form-control border-secondary" type="text" id="ecuacion2" name="ecuacion2" oninput="highlightVariables(this.value)">
                     <div class="d-flex justify-content-start">
@@ -112,45 +225,56 @@
                         </div>
                     
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="card p-4 shadow-sm mb-4 bg-silver">
             <div class="row">
-                <div class="col-6">
-
+                <div class="col-6 border-end border-secondary">
                     <h4>Variables:</h4>
-                    <div>
-                        <div id="x" class="variable" style="width: 20px"></div>
-                        <label for="x">X</label>
+                    <div id="var-x">
+                        <input type="hidden" class="var" value="x">
+                        <!-- <div id="box" class="avalible variable" style="width: 20px"></div> -->
+                        <input type="checkbox" class="available">
+                        <span class="d-inline">X</span>
+                        <input type="number" class="sup form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
+                        <input type="number" class="inf form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
                     </div>
-                    <div>
-                        <div id="y" class="variable" style="width: 20px"></div>
-                        <label for="y">y</label>
+                    <div id="var-y">
+                        <input type="hidden" class="var" value="y">
+                        <!-- <div id="box" class="avalible variable" style="width: 20px"></div> -->
+                        <input type="checkbox" class="available">
+                        <span class="d-inline">Y</span>
+                        <input type="number" class="sup form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
+                        <input type="number" class="inf form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
                     </div>
-                    <div>
-                        <div id="z" class="variable" style="width: 20px"></div>
-                        <label for="z">z</label>
+                    <div id="var-z">
+                        <input type="hidden" class="var" value="z">
+                        <!-- <div id="box" class="avalible variable" style="width: 20px"></div> -->
+                        <input type="checkbox" class="available">
+                        <span class="d-inline">Z</span>
+                        <input type="number" class="sup form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
+                        <input type="number" class="inf form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
                     </div>
-                    <div>
-                        <div id="w" class="variable" style="width: 20px"></div>
-                        <label for="w">w</label>
+                    <div id="var-w">
+                        <input type="hidden" class="var" value="w">
+                        <!-- <div id="box" class="avalible variable" style="width: 20px"></div> -->
+                        <input type="checkbox" class="available">
+                        <span class="d-inline">W</span>
+                        <input type="number" class="sup form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
+                        <input type="number" class="inf form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
                     </div>
-
                 </div>
                 <div class="col-6">
                     <h4>Superparámetros:</h4>
 
                     <label for="tamanoPoblacion">Tamaño de población:</label><br>
-                    <input class="form-control border-secondary" type="text" id="tamanoPoblacion" name="tamanoPoblacion"><br>
+                    <input class="form-control border-secondary" type="text" id="tamanoPoblacion" name="tamanoPoblacion" value="500"><br>
 
                     <label for="numeroIteraciones">Número de iteraciones:</label><br>
-                    <input class="form-control border-secondary" type="text" id="numeroIteraciones" name="numeroIteraciones"><br>
+                    <input class="form-control border-secondary" type="number" id="numeroIteraciones" name="numeroIteraciones" value="100"><br>
 
-                    <!-- <input type="submit" value="Generar vista histórica"> -->
-                    <button class="btn btn-outline-dark">Generar vista histórica</button>
-                    <!-- <input class="form-control border-secondary" type="submit" value="Generar resultado"> -->
-                    <input type="submit" class="btn btn-outline-dark ms-3" value="Generar resultado">
+                    <button id="generar-resultado" class="btn btn-outline-dark ms-3 w-100">Generar resultado</button>
                 </div>
             </div>
         </div>
