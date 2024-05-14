@@ -4,8 +4,7 @@ sys.path.append('backend')
 from flask import Flask, render_template, request
 from flaskwebgui import FlaskUI
 
-from backend import corebrain, mixplot, coreplotlib
-from matplotlib import pyplot as plt
+from backend import corebrain, mixplot
 
 import json
 
@@ -20,39 +19,40 @@ ui = FlaskUI(
 
 @app.route('/')
 def inicio():
-	return render_template('index.html')
+    """ Plantilla de inicio (formulario) """
+    return render_template('index.html')
 
-@app.route('/resultados/', methods=['GET'])
+@app.route('/resultados/', methods=['POST'])
 def mostrar_resultados():
     """ Llamada para generar el resultado del algoritmo, y así poder dar un valor concreto """
-    data = request.args.get('data')
+    data = json.loads(request.form.get('data'))
     
-    data = json.loads("""
-    {
-        "n_individuos" : 500,
-        "n_generaciones" : 50,
-        "ratio_mutacion" : 0.0005,
-        "funcs" : [
-            "38*x + 5",
-            "cos(x)*500 + y**3 + 20*x",
-            "0.8*((-y)+3)**3 + 4.33"
-        ],
-        "limites" : [
-            [0, 10],
-            [0, 20],
-        ],
-        "nombres" : [
-            "funciona 1",
-            "funciona 2",
-            "funciona 3"
-        ],
-        "prioridades" : [
-            1,
-            1,
-            1
-        ]
-    }
-    """)
+    # data = json.loads("""
+    # {
+    #     "n_individuos" : 500,
+    #     "n_generaciones" : 50,
+    #     "ratio_mutacion" : 0.0005,
+    #     "funcs" : [
+    #         "38*x + 5",
+    #         "cos(x)*500 + y**3 + 20*x",
+    #         "0.8*((-y)+3)**3 + 4.33"
+    #     ],
+    #     "limites" : [
+    #         [0, 10],
+    #         [0, 20],
+    #     ],
+    #     "nombres" : [
+    #         "funciona 1",
+    #         "funciona 2",
+    #         "funciona 3"
+    #     ],
+    #     "prioridades" : [
+    #         1,
+    #         1,
+    #         1
+    #     ]
+    # }
+    # """)
     
     n_inividuos = data['n_individuos']
     n_generaciones = data['n_generaciones']
@@ -67,7 +67,6 @@ def mostrar_resultados():
         n_indivs = n_inividuos,
         n_generations = n_generaciones,
         mutation_rate = ratio_mutacion,
-        limits = limites
     )
     
     for i in range(len(funciones)):
@@ -76,7 +75,13 @@ def mostrar_resultados():
             name = nombres[i],
             priority = prioridades[i]
         )
-        
+    
+    gen_system.append_limits(limites)
+    print(gen_system.variables)
+    print(gen_system.limits)
+    print(limites)
+    print(gen_system.gen_pool)
+    
     gen_system.run(verbose = False)
     
     mejor_resultado = gen_system.best_result

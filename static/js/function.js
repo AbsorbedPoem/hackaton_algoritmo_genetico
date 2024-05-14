@@ -141,10 +141,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
         data.n_individuos = parseInt(document.querySelector('#tamanoPoblacion').value)
         data.n_generaciones = parseInt(document.querySelector('#numeroIteraciones').value)
+        data.ratio_mutacion = parseInt(document.querySelector('#ratioMutacion').value)
+        
         data.funcs = []
         data.nombres = []
         data.prioridades = []
-        data.limites = {}
+        data.limites = new Object()
 
         cajas_de_funciones.forEach(caja => {
             if (caja.querySelector('.tiene-variables').value != ""){
@@ -165,6 +167,47 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         });
 
-        console.log(data)
+        console.log(data.funcs)
+        if (data.funcs.length == 0){
+            alert("No se han ingresado o validado funciones")
+            return
+        }
+
+        if (Object.keys(data.limites).length == 0){
+            alert("No se han establecido límites de variables")
+            return
+        }
+
+        nombres_str = ""
+        vars_str = ""
+
+        data.nombres.forEach(elem => {
+            nombres_str += `${elem},`
+        });
+        Object.keys(data.limites).forEach(elem => {
+            vars_str += `${elem},`
+        });
+
+        iziToast.question({
+            timeout: 20000,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'Hey',
+            message: `Se usarán las funciones: [${nombres_str}] y las variables [${vars_str}], estás de acuerdo?`,
+            position: 'center',
+            buttons: [
+                ['<button><b>Calcular</b></button>', function (instance, toast) {
+                    document.querySelector("#data-form").value = JSON.stringify(data)
+                    console.log(document.querySelector("#formulario-envio"))
+                    document.querySelector("#formulario-envio").submit()
+                }, true],
+                ['<button>Cancelar</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ],
+        });
     })
 })

@@ -69,7 +69,8 @@ class genAlgorithm :
     def append_function(self, function:str, name:str = '', priority:float = 1) -> bool:
         """Añade una función objetivo, sobre las cuales se evaluará la suma ponderada"""
         try:
-            f = sympify(function)
+            f = latex2sympy(function)
+            f = sympify(f)
             self.functions.append(f)
             if (name == ''):
                 self.functions_names.append(f'Funcion {len(self.functions)}')

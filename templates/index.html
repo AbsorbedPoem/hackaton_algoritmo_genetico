@@ -10,6 +10,9 @@
 
     <script src="/static/js/bootstrap.min.js"></script>
     
+    <link rel="stylesheet" href="/static/iziToast/css/iziToast.min.css"/>
+    <script src="/static/iziToast/js/iziToast.min.js"></script>
+
     <link rel="stylesheet" href="/static/mathquill/mathquill.css"/>
     <script src="/static/mathquill/mathquill.js"></script>
     
@@ -21,7 +24,7 @@
 </head>
   <body>
     <div class="display-5 fw-bold my-4">Formulario de Ecuaciones</div>
-    <form>
+    <div>
         <div class="">
             <div class="row mx-0">
                 <div id="f1" class="col-6 mb-3">
@@ -237,32 +240,32 @@
                         <!-- <div id="box" class="avalible variable" style="width: 20px"></div> -->
                         <input type="checkbox" class="available">
                         <span class="d-inline">X</span>
-                        <input type="number" class="sup form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
-                        <input type="number" class="inf form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
+                        <input type="number" class="inf form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
+                        <input type="number" class="sup form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
                     </div>
                     <div id="var-y">
                         <input type="hidden" class="var" value="y">
                         <!-- <div id="box" class="avalible variable" style="width: 20px"></div> -->
                         <input type="checkbox" class="available">
                         <span class="d-inline">Y</span>
-                        <input type="number" class="sup form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
-                        <input type="number" class="inf form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
+                        <input type="number" class="inf form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
+                        <input type="number" class="sup form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
                     </div>
                     <div id="var-z">
                         <input type="hidden" class="var" value="z">
                         <!-- <div id="box" class="avalible variable" style="width: 20px"></div> -->
                         <input type="checkbox" class="available">
                         <span class="d-inline">Z</span>
-                        <input type="number" class="sup form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
-                        <input type="number" class="inf form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
+                        <input type="number" class="inf form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
+                        <input type="number" class="sup form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
                     </div>
                     <div id="var-w">
                         <input type="hidden" class="var" value="w">
                         <!-- <div id="box" class="avalible variable" style="width: 20px"></div> -->
                         <input type="checkbox" class="available">
                         <span class="d-inline">W</span>
-                        <input type="number" class="sup form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
-                        <input type="number" class="inf form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
+                        <input type="number" class="inf form-control d-inline border-secondary" disabled placeholder="Límite superior" style="width: auto; width: 180px">
+                        <input type="number" class="sup form-control d-inline mb-3 border-secondary" disabled placeholder="Límite inferior" style="width: auto; width: 180px">
                     </div>
                 </div>
                 <div class="col-6">
@@ -274,10 +277,16 @@
                     <label for="numeroIteraciones">Número de iteraciones:</label><br>
                     <input class="form-control border-secondary" type="number" id="numeroIteraciones" name="numeroIteraciones" value="100"><br>
 
-                    <button id="generar-resultado" class="btn btn-outline-dark ms-3 w-100">Generar resultado</button>
+                    <label for="numeroIteraciones">Frecuencia de mutación:</label><br>
+                    <input class="form-control border-secondary" type="number" id="ratioMutacion" name="ratioMutacion" value="0.0005"><br>
+
+                    <form id="formulario-envio" action="/resultados/" method="post">
+                        <input id="data-form" type="hidden" name="data">
+                        <button id="generar-resultado" class="btn btn-outline-dark ms-3 w-100">Generar resultado</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </form> 
+    </div> 
   </body>
 </html>
